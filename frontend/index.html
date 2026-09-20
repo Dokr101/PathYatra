@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="YatraPath — Intelligent travel itinerary planner for Nepal. Get a personal day-by-day plan in under 3 seconds." />
+    <title>YatraPath — Let the path find you</title>
+
+    <!-- Critical CSS: ink screen appears before React hydrates -->
+    <style>
+      *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+      html{scroll-behavior:auto}
+      body{background:#0F1A22;color:#F4EFE6;font-family:system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+      #yp-intro-overlay{position:fixed;inset:0;z-index:9999;background:#0F1A22;display:flex;align-items:center;justify-content:center}
+      #root{min-height:100dvh}
+      /* Skip link */
+      .skip-link{position:absolute;left:-9999px;top:1rem;z-index:10000;padding:.75rem 1.5rem;background:#D3A045;color:#0F1A22;font-weight:700;border-radius:4px;text-decoration:none}
+      .skip-link:focus{left:1rem}
+    </style>
+
+    <!-- Google Fonts: Fraunces (display), Inter (body), Noto Serif Devanagari (accent) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600;1,9..144,700&family=Inter:wght@300;400;500;600;700&family=Noto+Serif+Devanagari:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
+
+    <!-- Inline script: only show ink screen on first visit to "/" -->
+    <script>
+      (function(){
+        var isHome = window.location.pathname === '/' || window.location.pathname === '';
+        var seen = sessionStorage.getItem('yp_intro_seen');
+        if (!isHome || seen) {
+          // Not homepage or already seen — remove overlay immediately
+          document.addEventListener('DOMContentLoaded', function(){
+            var el = document.getElementById('yp-intro-overlay');
+            if (el) el.remove();
+          });
+          document.documentElement.style.setProperty('--body-bg','#F4EFE6');
+          document.body && (document.body.style.background = '#F4EFE6');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+
+    <!-- Ink overlay: appears before JS hydrates, React removes it -->
+    <div id="yp-intro-overlay" aria-hidden="true">
+      <img
+        src="/logo.svg"
+        alt=""
+        id="yp-intro-logo-static"
+        style="width:160px;height:auto;opacity:0;transition:opacity 0.3s"
+      />
+    </div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
